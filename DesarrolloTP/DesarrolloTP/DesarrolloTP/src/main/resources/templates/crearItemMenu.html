@@ -109,14 +109,14 @@
                 <select id="tipoItem" name="tipoItem">
                     <option value="Gaseosa">Gaseosa</option>
                     <option value="Alcohol">Alcohol</option>
-                    <option value="Plato">Plato</option>
+                    <option value="Plato">Plato</option >
                 </select>
             </div>
             
             <!-- Campo para nombre del item -->
             <div class="input-group">
                 <label for="nombre">Nombre del item</label>
-                <input type="text" id="nombre" name="nombre" placeholder="Ingrese el nombre del item" />
+                <input type="text" id="nombre" name="nombre" th:value="${itemMenu != null ? itemMenu.nombre : ''}"  placeholder="Ingrese el nombre del item" />
                 <!-- Mostrar error si existe -->
                 <div th:if="${errores != null and errores['nombre'] != null}" class="error" th:text="${errores['nombre']}"></div>
             </div>
@@ -124,7 +124,7 @@
             <!-- Campo para descripción del item -->
             <div class="input-group">
                 <label for="descripcion">Descripción</label>
-                <input type="text" id="descripcion" name="descripcion" placeholder="Ingrese la descripción del item" />
+                <input type="text" id="descripcion" name="descripcion" th:value="${itemMenu != null ? itemMenu.descripcion : ''}"  placeholder="Ingrese la descripción del item" />
                 <!-- Mostrar error si existe -->
                 <div th:if="${errores != null and errores['descripcion'] != null}" class="error" th:text="${errores['descripcion']}"></div>
             </div>
@@ -145,7 +145,7 @@
             <!-- Campo para el precio del item -->
             <div class="input-group">
                 <label for="precio">Precio</label>
-                <input type="text" id="precio" name="precio" placeholder="Ingrese el precio"
+                <input type="text" id="precio" name="precio" th:value="${itemMenu != null ? itemMenu.precio : ''}" placeholder="Ingrese el precio"
                        pattern="^\d+(\.\d{1,2})?$" inputmode="decimal"
                        title="Por favor, ingrese un número válido con un único punto decimal y hasta dos decimales."
                 <!-- Mostrar error si existe -->

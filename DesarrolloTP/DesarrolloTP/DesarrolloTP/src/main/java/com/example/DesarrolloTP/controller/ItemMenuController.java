@@ -1,14 +1,6 @@
 
 package com.example.DesarrolloTP.controller;
 
-import com.example.DesarrolloTP.model.Alcohol;
-import com.example.DesarrolloTP.model.Categoria;
-import com.example.DesarrolloTP.model.Gaseosa;
-import com.example.DesarrolloTP.model.ItemMenu;
-import com.example.DesarrolloTP.model.Plato;
-import com.example.DesarrolloTP.service.CategoriaService;
-import com.example.DesarrolloTP.service.ItemMenuNotFoundException;
-import com.example.DesarrolloTP.service.ItemMenuService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +12,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.example.DesarrolloTP.model.Alcohol;
+import com.example.DesarrolloTP.model.Categoria;
+import com.example.DesarrolloTP.model.Gaseosa;
+import com.example.DesarrolloTP.model.ItemMenu;
+import com.example.DesarrolloTP.model.Plato;
+import com.example.DesarrolloTP.service.CategoriaService;
+import com.example.DesarrolloTP.service.ItemMenuNotFoundException;
+import com.example.DesarrolloTP.service.ItemMenuService;
 
 @Controller
 public class ItemMenuController {
@@ -75,7 +76,7 @@ public class ItemMenuController {
             itemMenu.setNombre(nombre);
             itemMenu.setDescripcion(descripcion);
             itemMenu.setPrecio(precio);
-
+            System.out.println("ItemMenuNombre: " + itemMenu.getNombre());
             Categoria categoria = categoriaService.buscarCategoria(categoriaId);  
             itemMenu.setCategoria(categoria); 
 

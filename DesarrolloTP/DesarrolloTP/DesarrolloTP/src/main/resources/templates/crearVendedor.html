@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear vendedor</title>
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-top: 20px;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .error {
+        color: red;
+        font-size: 15px;
+        margin-top: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            table-layout: fixed; /* Asegura que las columnas tengan un ancho fijo */
+        }
+
+        table th, table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            overflow: hidden; /* Previene que el contenido desborde */
+            text-overflow: ellipsis;
+        }
+
+        table th {
+            background-color: #f2f2f2;
+        }
+
+        table tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        table td:last-child, table th:last-child {
+            text-align: center; /* Centrar los checkboxes */
+        }
+
+        button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button.save-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+        }
+
+        button.save-btn:hover {
+            background-color: #45a049;
+        }
+
+        button.cancel-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            margin-left: 10px;
+        }
+
+        button.cancel-btn:hover {
+            background-color: #c0392b;
+        }
+
+        input[type="checkbox"] {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Crear vendedor</h1>
+        <form th:action="@{/vendedores/guardar}" method="post">
+            
+            <!-- Campos de nombre y dirección -->
+            <div class="input-group">
+                <label for="nombre">Nombre</label>
+                <input type="text" id="nombre" name="nombre" th:value="${vendedor.nombre}" placeholder="Ingrese el nombre del vendedor" />
+                <!-- Mostrar error si existe -->
+                <div th:if="${errores != null and errores['nombre'] != null}" class="error" th:text="${errores['nombre']}"></div>
+            </div>
+            <div class="input-group">
+                <label for="direccion">Dirección</label>
+                <input type="text" id="direccion" name="direccion" th:value="${vendedor.direccion}" placeholder="Ingrese la dirección del vendedor" />
+                <!-- Mostrar error si existe -->
+                <div th:if="${errores != null and errores['direccion'] != null}" class="error" th:text="${errores['direccion']}"></div>
+            </div>
+
+            <!-- Título para la sección de ítems del menú -->
+            <h2 style="margin-top: 30px; color: #333; font-size: 18px;">Agregar items al menú del vendedor</h2>
+            
+            <div th:if="${errores != null and errores['itemsMenu'] != null}" class="error">
+                <p>Debe seleccionar al menos un item para agregar al menú.</p>
+            </div>
+
+            <!-- Mostrar mensaje de error si existe -->
+            <div th:if="${ERROR}" style="color: red; font-weight: bold;">
+                <p th:text="${ERROR}"></p>
+            </div>
+        
+            <!-- Tabla de ítems -->
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 10%;">ID</th>
+                        <th style="width: 20%;">Tipo item</th>
+                        <th style="width: 20%;">Nombre</th>
+                        <th style="width: 20%;">Descripción</th>
+                        <th style="width: 10%;">Categoría</th>
+                        <th style="width: 10%;">Precio</th>
+                        <th style="width: 10%;">Agregar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="item : ${itemsMenu}">
+                        <td th:text="${item.id}">ID del item</td>
+                        <td th:text="${item.getClass().simpleName}">Tipo</td>
+                        <td th:text="${item.nombre}">Nombre</td>
+                        <td th:text="${item.descripcion}">Descripción</td>
+                        <td th:text="${item.categoria.descripcion}">Categoría</td> 
+                        <td th:text="${item.precio}">Precio</td>
+                        <td>
+                            <input type="checkbox" th:name="itemIds" th:value="${item.id}" />
+                        </td>
+                    </tr>                    
+                </tbody>
+            </table>
+        
+            <!-- Botones de acción -->
+            <button class="save-btn" type="submit">Crear</button>
+            <button class="cancel-btn" type="button" onclick="window.location.href='/panelVendedores.html'">Cancelar</button>
+        </form> 
+    </div>
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Vendedores</title>
+        <meta charset="UTF-8"/>
+
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                display: flex;
+                height: 100vh;
+            }
+
+            /* Estilo para la barra de navegación lateral */
+            .sidebar {
+                width: 200px;
+                background-color: #2c3e50;
+                color: white;
+                padding: 20px;
+                box-sizing: border-box;
+            }
+
+            .sidebar h2 {
+                text-align: center;
+                margin-bottom: 20px;
+            }
+
+            .sidebar a {
+                display: block;
+                color: white;
+                text-decoration: none;
+                padding: 10px 0;
+                border-bottom: 1px solid #34495e;
+            }
+
+            .sidebar a:hover {
+                background-color: #34495e;
+            }
+
+            /* Contenedor principal */
+            .main-content {
+                flex: 1;
+                padding: 20px;
+                box-sizing: border-box;
+            }
+
+            /* Estilo para la barra de búsqueda */
+            .search-bar {
+                margin-bottom: 20px;
+            }
+
+            .search-bar input {
+                width: 80%;
+                padding: 10px;
+                font-size: 16px;
+                margin-right: 10px;
+            }
+
+            .search-bar button {
+                padding: 10px 15px;
+                background-color: #3498db;
+                color: white;
+                border: none;
+                cursor: pointer;
+            }
+
+            .search-bar button:hover {
+                background-color: #2980b9;
+            }
+
+            /* Estilo para la tabla */
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 10px;
+            }
+
+            table, th, td {
+                border: 1px solid #ddd;
+            }
+
+            th, td {
+                padding: 10px;
+                text-align: left;
+            }
+
+            th {
+                background-color: #f4f4f4;
+            }
+
+            /* Estilo para los botones de acción */
+            .action-buttons button {
+                padding: 5px 10px;
+                margin-right: 5px;
+            }
+
+            .edit-btn {
+                background-color: #3498db;
+                color: white;
+                border: none;
+            }
+
+            .delete-btn {
+                background-color: #e74c3c;
+                color: white;
+                border: none;
+            }
+
+            /* Estilo para el botón de Crear vendedor */
+            .create-btn {
+                background-color: #2ecc71;
+                color: white;
+                padding: 10px 15px;
+                border: none;
+                margin-bottom: 20px;
+                cursor: pointer;
+            }
+
+            .create-btn:hover {
+                background-color: #27ae60;
+            }
+        </style>
+    </head>
+    <body>
+
+        <!-- Barra lateral -->
+        <div class="sidebar">
+            <h2>Panel</h2>
+            <a href="panelVendedores.html">Vendedores</a>
+            <a href="panelClientes.html">Clientes</a>
+            <a href="panelItemsMenu.html">Items Menú</a>
+            <a href="panelPedidos.html">Pedidos</a>
+        </div>
+
+        <!-- Contenido principal -->
+        <div class="main-content">
+
+            <!-- Formulario de búsqueda -->
+            <div class="search-bar">
+                <form action="/vendedores" method="get">
+                    <input type="text" name="search" placeholder="Buscar por nombre o ID" value=""/>
+                    <button type="submit">Buscar</button>
+                </form>
+            </div>
+
+            <div class="create-vendedor-button">
+                <a href="/vendedores/0/crear">
+                    <button class="create-btn">Crear vendedor</button>
+                </a>
+            </div>
+
+            <!-- Sección de vendedores -->
+            <div id="vendedores" class="section">
+                <h2>Vendedores</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>ID</th>
+                            <th>Dirección</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="vendedor : ${vendedores}">
+                            <td th:text="${vendedor.nombre}">Nombre</td>
+                            <td th:text="${vendedor.id}">ID</td>
+                            <td th:text="${vendedor.direccion}">Dirección</td>
+                            <td class="action-buttons">
+                                <a href="#" th:href="@{/vendedores/{id}/editar(id=${vendedor.id})}">
+                                    <button class="edit-btn">Editar</button>
+                                </a>
+                                <a href="#" th:href="@{/vendedores/{id}/eliminar(id=${vendedor.id})}">
+                                    <button class="delete-btn">Eliminar</button>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>

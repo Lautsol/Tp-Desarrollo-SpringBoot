@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar item menú</title>
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-top: 20px;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
+        }
+
+        /* Eliminar los controles numéricos en navegadores */
+        .input-group input[type="number"] {
+            -moz-appearance: textfield; /* Elimina los controles numéricos */
+        }
+
+        .input-group input[type="number"]::-webkit-outer-spin-button,
+        .input-group input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .error {
+        color: red;
+        font-size: 15px;
+        margin-top: 5px;
+        }
+
+        button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button.save-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+        }
+
+        button.save-btn:hover {
+            background-color: #45a049;
+        }
+
+        button.cancel-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            margin-left: 10px;
+        }
+
+        button.cancel-btn:hover {
+            background-color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Editar item menú</h1>
+        <!-- Formulario para editar el item -->
+        <form th:action="@{/items-menu/{id}/guardar(id=${itemMenu.id})}" method="post">
+
+            <input type="hidden" th:name="id" th:value="${itemMenu.id}" />
+            
+            <input type="hidden" name="tipoItem" th:value="${#strings.substring(itemMenu.getClass().toString(), itemMenu.getClass().toString().lastIndexOf('.') + 1)}" />
+
+            <!-- Mostrar tipo de item como solo lectura -->
+            <div class="input-group">
+                <label for="tipoItem">Tipo de item</label>
+                <input type="text" id="tipoItem" th:value="${#strings.substring(itemMenu.getClass().toString(), itemMenu.getClass().toString().lastIndexOf('.') + 1)}" disabled />
+            </div>
+            
+            <!-- Campo para nombre del item -->
+            <div class="input-group">
+                <label for="nombre">Nombre del item</label>
+                <input type="text" id="nombre" name="nombre" th:value="${itemMenu.nombre}" placeholder="Ingrese el nombre del item" />
+                <div th:if="${errores != null and errores['nombre'] != null}" class="error" th:text="${errores['nombre']}"></div>
+            </div>
+            
+            <!-- Campo para descripción del item -->
+            <div class="input-group">
+                <label for="descripcion">Descripción</label>
+                <input type="text" id="descripcion" name="descripcion" th:value="${itemMenu.descripcion}" placeholder="Ingrese la descripción del item" />
+                <div th:if="${errores != null and errores['descripcion'] != null}" class="error" th:text="${errores['descripcion']}"></div>
+            </div>
+            
+            <!-- Selección de categoría -->
+            <div class="input-group">
+                <label for="categoria">Categoría</label>
+                <select id="categoria" name="categoriaId">
+                    <option th:each="categoria : ${categorias}" 
+                            th:value="${categoria.id}" 
+                            th:text="${categoria.descripcion}"
+                            th:selected="${categoria.id == itemMenu.categoria.id}">
+                    </option>
+                </select>
+                <!-- Mostrar error si existe -->
+                <div th:if="${errores != null and errores['categoria'] != null}" class="error" th:text="${errores['categoria']}"></div>
+            </div>
+            
+            <!-- Campo para el precio del item -->
+            <div class="input-group">
+                <label for="precio">Precio</label>
+                <input type="text" id="precio" name="precio" placeholder="Ingrese el precio"
+                       pattern="^\d+(\.\d{1,2})?$" inputmode="decimal"
+                       title="Por favor, ingrese un número válido con un único punto decimal y hasta dos decimales."
+                <!-- Mostrar error si existe -->
+                <div th:if="${errores != null and errores['precio'] != null}" class="error" th:text="${errores['precio']}"></div>
+            </div> 
+            
+            <!-- Botones de acción -->
+            <button class="save-btn" type="submit">Guardar</button>
+            <button class="cancel-btn" type="button" onclick="window.location.href='/panelItemsMenu.html'">Cancelar</button>
+        </form>
+    </div>
+</body>
+</html>

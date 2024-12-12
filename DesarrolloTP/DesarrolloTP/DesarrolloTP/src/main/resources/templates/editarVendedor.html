@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar vendedor</title>
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-top: 20px;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .error {
+        color: red;
+        font-size: 15px;
+        margin-top: 5px;
+        }
+
+        /* Ajuste de estilo de las tablas */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            table-layout: fixed; /* Fija el tamaño de las columnas */
+        }
+
+        table th, table td {
+            padding: 12px;
+            text-align: left; /* Alineación a la izquierda */
+            border-bottom: 1px solid #ddd;
+            vertical-align: middle; /* Alineación vertical centrada */
+            overflow: hidden; /* Previene que el contenido desborde */
+            text-overflow: ellipsis;
+        }
+
+        table th {
+            background-color: #f2f2f2;
+        }
+
+        table tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        table td:last-child, table th:last-child {
+            text-align: center; /* Centrar los checkboxes */
+        }
+
+        button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button.save-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+        }
+
+        button.save-btn:hover {
+            background-color: #45a049;
+        }
+
+        button.cancel-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            margin-left: 10px;
+        }
+
+        button.cancel-btn:hover {
+            background-color: #c0392b;
+        }
+
+        input[type="checkbox"] {
+            margin: 0;
+        }
+
+        /* Define el ancho fijo para las columnas */
+        table th:nth-child(1), table td:nth-child(1) { width: 10%; }
+        table th:nth-child(2), table td:nth-child(2) { width: 15%; } /* Reducido el ancho de 'Nombre' */
+        table th:nth-child(3), table td:nth-child(3) { width: 20%; }
+        table th:nth-child(4), table td:nth-child(4) { width: 30%; }
+        table th:nth-child(5), table td:nth-child(5) { width: 15%; } /* Aumentado el ancho de 'Categoría' */
+        table th:nth-child(6), table td:nth-child(6) { width: 10%; }
+        table th:nth-child(7), table td:nth-child(7) { width: 10%; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Editar vendedor</h1>
+        <form th:action="@{/vendedores/guardar}" method="post">
+            
+            <!-- Campo oculto para el id del vendedor -->
+            <input type="hidden" th:name="id" th:value="${vendedor.id}" />
+        
+            <!-- Campos de nombre y dirección -->
+            <div class="input-group">
+                <label for="nombre">Nombre</label>
+                <input type="text" id="nombre" name="nombre" th:value="${vendedor.nombre}" placeholder="Ingrese el nombre del vendedor" />
+            </div>
+            <div class="input-group">
+                <label for="direccion">Dirección</label>
+                <input type="text" id="direccion" name="direccion" th:value="${vendedor.direccion}" placeholder="Ingrese la dirección del vendedor" />
+            </div>
+
+            <!-- Ítems actuales del vendedor -->
+            <h2 style="margin-top: 30px; color: #333; font-size: 18px;">Items actuales del vendedor</h2>
+            
+            <div th:if="${errores != null and errores['itemsMenu'] != null}" class="error">
+                <p>El vendedor debe tener al menos un item.</p>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tipo item</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Categoría</th>
+                        <th>Precio</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="item : ${vendedor.items}">
+                        <td th:text="${item.id}">ID del item</td>
+                        <td th:text="${item.getClass().simpleName}">Tipo</td>
+                        <td th:text="${item.nombre}">Nombre</td>
+                        <td th:text="${item.descripcion}">Descripción</td>
+                        <td th:text="${item.categoria.descripcion}">Categoría</td>
+                        <td th:text="${item.precio}">Precio</td>
+                        <td>
+                            <input type="checkbox" th:name="itemsEliminarIds" th:value="${item.id}" 
+                                th:checked="${itemsEliminar != null && itemsEliminar.contains(item.id)}"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Agregar nuevos ítems al vendedor -->
+            <h2 style="margin-top: 30px; color: #333; font-size: 18px;">Agregar items al menú del vendedor</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tipo item</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Categoría</th>
+                        <th>Precio</th>
+                        <th>Agregar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="item : ${itemsMenuDisponibles}">
+                        <td th:text="${item.id}">ID del item</td>
+                        <td th:text="${item.getClass().simpleName}">Tipo</td>
+                        <td th:text="${item.nombre}">Nombre</td>
+                        <td th:text="${item.descripcion}">Descripción</td>
+                        <td th:text="${item.categoria.descripcion}">Categoría</td>
+                        <td th:text="${item.precio}">Precio</td>
+                        <td>
+                            <input type="checkbox" 
+                            th:name="itemIds" 
+                            th:value="${item.id}" 
+                            th:checked="${itemsEliminar != null and itemsEliminar.contains(item.id)}" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        
+            <!-- Botones de acción -->
+            <button class="save-btn" type="submit">Guardar</button>
+            <button class="cancel-btn" type="button" onclick="window.location.href='/panelVendedores.html'">Cancelar</button>
+        </form>        
+    </div>
+</body>
+</html>

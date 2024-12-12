@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear cliente</title>
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-top: 20px;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .error {
+        color: red;
+        font-size: 15px;
+        margin-top: 5px;
+        }
+
+        /* Estilo para la tabla */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th, table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #f2f2f2;
+        }
+
+        table tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        /* Estilo para los botones */
+        button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        /* Botón "Guardar" */
+        button.save-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+        }
+
+        button.save-btn:hover {
+            background-color: #45a049;
+        }
+
+        /* Botón "Cancelar" */
+        button.cancel-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            margin-left: 10px;
+        }
+
+        button.cancel-btn:hover {
+            background-color: #c0392b;
+        }
+
+        /* Estilo para el checkbox */
+        input[type="checkbox"] {
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Crear cliente</h1>
+        <form th:action="@{/clientes/guardar}" method="post">
+
+            <!-- Campos de información -->
+            <div class="input-group">
+                <label for="nombre">Nombre</label>
+                <input type="text" id="nombre" name="nombre" th:value="${cliente.nombre}" placeholder="Ingrese el nombre del cliente" />
+                <!-- Mostrar error si existe -->
+                <div th:if="${errores != null and errores['nombre'] != null}" class="error" th:text="${errores['nombre']}"></div>
+            </div>
+            
+            <div class="input-group">
+                <label for="direccion">Dirección</label>
+                <input type="text" id="direccion" name="direccion" th:value="${cliente.direccion}" placeholder="Ingrese la dirección del cliente" />
+                <!-- Mostrar error si existe -->
+                <div th:if="${errores != null and errores['direccion'] != null}" class="error" th:text="${errores['direccion']}"></div>
+            </div>
+            
+            <div class="input-group">
+                <label for="cuit">CUIT</label>
+                <input type="number" id="cuit" name="cuit" th:value="${cliente.cuit}" placeholder="Ingrese el cuit del cliente" />
+                <!-- Mostrar error si existe -->
+                <div th:if="${errores != null and errores['cuit'] != null}" class="error" th:text="${errores['cuit']}"></div>
+            </div>
+            
+            <div class="input-group">
+                <label for="email">Email</label>
+                <input type="text" id="email" name="email" th:value="${cliente.email}" placeholder="Ingrese el email del cliente" />
+                <!-- Mostrar error si existe -->
+                <div th:if="${errores != null and errores['email'] != null}" class="error" th:text="${errores['email']}"></div>
+            </div>
+            
+            <div class="input-group">
+                <label for="CBU">CBU</label>
+                <input type="number" id="CBU" name="cbu" th:value="${cliente.cbu}" placeholder="Ingrese el CBU del cliente" />
+                <!-- Mostrar error si existe -->
+                <div th:if="${errores != null and errores['cbu'] != null}" class="error" th:text="${errores['cbu']}"></div>
+            </div>
+            
+            <div class="input-group">
+                <label for="alias">Alias</label>
+                <input type="text" id="alias" name="alias" th:value="${cliente.alias}" placeholder="Ingrese el alias del cliente" />
+                <!-- Mostrar error si existe -->
+                <div th:if="${errores != null and errores['alias'] != null}" class="error" th:text="${errores['alias']}"></div>
+            </div>
+        
+            <!-- Botones de acción -->
+            <button class="save-btn" type="submit">Crear</button>
+            <button class="cancel-btn" type="button" onclick="window.location.href='/panelClientes.html'">Cancelar</button>
+        </form>
+    </div>
+</body>
+</html>

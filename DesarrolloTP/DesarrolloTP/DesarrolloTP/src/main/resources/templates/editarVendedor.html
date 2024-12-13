@@ -196,8 +196,10 @@
                         <td th:text="${item.categoria.descripcion}">Categoría</td>
                         <td th:text="${item.precio}">Precio</td>
                         <td>
-                            <input type="checkbox" th:name="itemsEliminarIds" th:value="${item.id}" 
-                                th:checked="${itemsEliminar != null && itemsEliminar.contains(item.id)}"/>
+                            <input type="checkbox" 
+                            th:name="itemsEliminarIds" 
+                            th:value="${item.id}" 
+                            th:checked="${itemsEliminar != null && itemsEliminar.contains(item.id)}"/>
                         </td>
                     </tr>
                 </tbody>
@@ -229,7 +231,7 @@
                             <input type="checkbox" 
                             th:name="itemIds" 
                             th:value="${item.id}" 
-                            th:checked="${itemsEliminar != null and itemsEliminar.contains(item.id)}" />
+                            th:checked="${itemsAgregar != null and itemsAgregar.contains(item.id)}" />
                         </td>
                     </tr>
                 </tbody>

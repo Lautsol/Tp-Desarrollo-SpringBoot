@@ -61,7 +61,7 @@ public class VendedorController {
                     ItemMenu item = itemMenuService.buscarPorId(itemId);
                     vendedor.agregarItem(item); // Agregar item a la lista del vendedor
                 }
-            }
+            } 
     
             // Verificar si hay items que eliminar
             List<ItemMenu> itemsAEliminar = new ArrayList<>();
@@ -116,6 +116,7 @@ public class VendedorController {
                     model.addAttribute("vendedor", vendedorEditar);
                     model.addAttribute("itemsMenuDisponibles", itemsMenuDisponibles);
                     model.addAttribute("itemsEliminar", itemsEliminarIds);
+                    model.addAttribute("itemsAgregar", itemsIds);
             
                     return "editarVendedor";
                 }

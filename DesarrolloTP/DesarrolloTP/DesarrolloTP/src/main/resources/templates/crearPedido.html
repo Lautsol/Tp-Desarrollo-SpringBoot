@@ -159,6 +159,8 @@
                     <option value="TRANSFERENCIA" th:selected="${metodoPago == 'TRANSFERENCIA'}">TRANSFERENCIA</option>
                     <option value="MERCADOPAGO" th:selected="${metodoPago == 'MERCADOPAGO'}">MERCADOPAGO</option>
                 </select>
+                <div th:if="${errores != null and errores['cbu'] != null}" class="error" th:text="${errores['cbu']}"></div>
+                <div th:if="${errores != null and errores['alias'] != null}" class="error" th:text="${errores['alias']}"></div>
             </div>
 
             <!-- Estado (no editable, solo mostrar) -->

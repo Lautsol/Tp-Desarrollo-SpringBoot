@@ -160,6 +160,8 @@
                 <!-- Mostrar error si existe -->
                 <div th:if="${errores != null and errores['alias'] != null}" class="error" th:text="${errores['alias']}"></div>
             </div>
+
+            <div th:if="${errores != null and errores['cbuAlias'] != null}" class="error" th:text="${errores['cbuAlias']}"></div>
             
             <!-- Botones de acción -->
             <button class="save-btn" type="submit">Guardar</button>

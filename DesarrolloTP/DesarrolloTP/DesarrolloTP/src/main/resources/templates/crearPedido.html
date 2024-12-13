@@ -46,6 +46,12 @@
             border-radius: 4px;
         }
 
+        .error {
+        color: red;
+        font-size: 15px;
+        margin-top: 5px;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -125,14 +131,16 @@
             <!-- Campos de cliente y vendedor -->
             <div class="input-group">
                 <label for="idCliente">ID cliente</label>
-                <input type="text" id="idCliente" name="idCliente" required placeholder="Ingrese el ID del cliente"
-                    th:value="${idCliente}" />
+                <input type="text" id="idCliente" name="idCliente" placeholder="Ingrese el ID del cliente" th:value="${idCliente}" />
+                <!-- Mostrar error si existe -->
+                <div th:if="${errores != null and errores['cliente'] != null}" class="error" th:text="${errores['cliente']}"></div>
             </div>
 
             <div class="input-group">
                 <label for="idVendedor">ID vendedor</label>
-                <input type="text" id="idVendedor" name="idVendedor" required placeholder="Ingrese el ID del vendedor"
-                    th:value="${idVendedor}" onchange="this.form.submit()" />
+                <input type="text" id="idVendedor" name="idVendedor" placeholder="Ingrese el ID del vendedor" th:value="${idVendedor}" onchange="this.form.submit()" />
+                <!-- Mostrar error si existe -->
+                <div th:if="${errores != null and errores['vendedor'] != null}" class="error" th:text="${errores['vendedor']}"></div>
             </div>
 
            <!-- Tipo de pago -->
@@ -167,6 +175,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <div th:if="${errores != null and errores['items'] != null}" class="error" th:text="${errores['items']}"></div>
                     <tr th:each="item : ${itemsMenu}">
                         <td th:text="${item.id}">ID del item</td>
                         <td th:text="${item.getClass().simpleName}">Tipo</td>
@@ -178,7 +187,10 @@
                             <input type="number" th:name="'cantidad_' + ${item.id}" value="1" min="1" />
                         </td>
                         <td>
-                            <input type="checkbox" th:name="'itemIds_' + ${item.id}" value="${item.id}" />
+                            <input type="checkbox" 
+                                   th:name="'itemIds_' + ${item.id}" 
+                                   th:value="${item.id}"
+                                   th:checked="${itemIds != null && itemIds.contains(item.id)}" />
                         </td>
                     </tr>
                 </tbody>

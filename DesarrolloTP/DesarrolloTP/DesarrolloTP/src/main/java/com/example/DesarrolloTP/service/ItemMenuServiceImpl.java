@@ -79,10 +79,6 @@ public class ItemMenuServiceImpl implements ItemMenuService {
             errores.put("precio", "El precio no puede ser nulo.");
         }
 
-        else if(!itemMenu.getPrecio().toString().matches("\\d+(\\.\\d+)?")) {
-            errores.put("precio", "El precio no es válido.");
-        }
-
         else if(itemMenu.getPrecio() <= 0) {
             errores.put("precio", "El precio debe ser mayor a cero.");
         }

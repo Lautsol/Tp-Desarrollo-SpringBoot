@@ -121,13 +121,19 @@
             </div>
 
             <div class="input-group">
-                <label for="total">Total</label>
+                <label for="total">Total pedido</label>
                 <input type="text" id="total" name="total" readonly th:value="${pedido.total}" />
             </div>
 
             <div class="input-group">
                 <label for="metodoPago">Forma de pago</label>
                 <input type="text" id="metodoPago" name="metodoPago" readonly th:value="${pedido.tipoPago}" />
+            </div>
+
+            <div class="input-group">
+                <label for="recargo">Recargo</label>
+                <input type="text" id="recargo" name="recargo" readonly 
+                       th:value="${recargo}" />
             </div>
 
             <div class="input-group">

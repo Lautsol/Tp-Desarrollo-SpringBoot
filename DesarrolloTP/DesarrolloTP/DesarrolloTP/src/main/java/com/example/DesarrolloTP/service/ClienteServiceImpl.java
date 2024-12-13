@@ -4,8 +4,6 @@ package com.example.DesarrolloTP.service;
 import com.example.DesarrolloTP.model.Cliente;
 import com.example.DesarrolloTP.model.Pedido;
 import com.example.DesarrolloTP.repository.ClienteRepository;
-import com.example.DesarrolloTP.repository.PedidoRepository;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +19,7 @@ public class ClienteServiceImpl implements ClienteService {
     private ClienteRepository clienteRepository;
 
     @Autowired
-    private PedidoRepository pedidoRepository;
+    private PedidoService pedidoService;
     
     public Cliente crearCliente(Cliente cliente) {
         return clienteRepository.save(cliente); 
@@ -36,7 +34,7 @@ public class ClienteServiceImpl implements ClienteService {
 
         for(Pedido pedido : cliente.getPedidos()) {
         pedido.setCliente(null);
-        pedidoRepository.save(pedido);
+        pedidoService.modificarPedido(pedido);
         }
 
         clienteRepository.deleteById(id);

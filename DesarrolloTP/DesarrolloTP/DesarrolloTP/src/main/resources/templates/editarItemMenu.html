@@ -145,9 +145,9 @@
             <!-- Campo para el precio del item -->
             <div class="input-group">
                 <label for="precio">Precio</label>
-                <input type="text" id="precio" name="precio" placeholder="Ingrese el precio"
-                       pattern="^\d+(\.\d{1,2})?$" inputmode="decimal"
-                       title="Por favor, ingrese un número válido con un único punto decimal y hasta dos decimales."
+                <input type="text" id="precio" name="precio" th:value="${itemMenu.precio}" placeholder="Ingrese el precio"
+                       pattern="^\d+(\.\d+)?$" inputmode="decimal"
+                       title="El precio debe ser un número positivo y con un único punto decimal. Ejemplo: 123.45"
                 <!-- Mostrar error si existe -->
                 <div th:if="${errores != null and errores['precio'] != null}" class="error" th:text="${errores['precio']}"></div>
             </div> 

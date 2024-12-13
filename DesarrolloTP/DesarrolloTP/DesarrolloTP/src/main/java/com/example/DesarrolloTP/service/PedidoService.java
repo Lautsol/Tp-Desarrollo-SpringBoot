@@ -3,7 +3,7 @@ package com.example.DesarrolloTP.service;
 
 import com.example.DesarrolloTP.model.Pedido;
 import java.util.List;
-
+import java.util.Map;
 
 public interface PedidoService {
     
@@ -14,5 +14,5 @@ public interface PedidoService {
     public List<Pedido> buscarPorIdCliente(int id) throws PedidoNotFoundException;
     public List<Pedido> buscarPorIdVendedor(int id) throws PedidoNotFoundException;
     public List<Pedido> obtenerTodosLosPedidos();
-    
+    public Map<String, String> validarPedido(Integer idCliente, Integer idVendedor, List<Integer> itemIds);
 }

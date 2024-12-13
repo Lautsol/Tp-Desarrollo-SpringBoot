@@ -324,10 +324,19 @@ public class PedidoController {
     @GetMapping("/pedidos")
     public String buscarPedidos(@RequestParam(value = "searchType", required = false) String searchType,
                                 @RequestParam(value = "searchQuery", required = false) String searchQuery,
+                                @RequestParam(value = "reset", required = false) String reset,
                                 Model model) {
 
         try { 
             List<Pedido> pedidos = new ArrayList<>();
+
+            // Verificar si el parámetro 'reset' está presente
+            if (reset != null && reset.equals("true")) {
+                pedidos = pedidoService.obtenerTodosLosPedidos();
+                model.addAttribute("pedidos", pedidos);
+                
+                return "panelPedidos";
+            }
 
             if (searchType == null || searchType.isEmpty() || searchQuery == null || searchQuery.trim().isEmpty()) {
                 pedidos = pedidoService.obtenerTodosLosPedidos();

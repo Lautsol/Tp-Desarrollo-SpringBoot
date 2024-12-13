@@ -96,6 +96,7 @@ public class ItemMenuController {
             }
 
             return "redirect:/panelItemsMenu.html";  
+            
         } catch (Exception e) {
             return "errorPage";  
         }
@@ -150,12 +151,25 @@ public class ItemMenuController {
 
             } else items = itemMenuService.obtenerTodosLosItemsMenu(); // Si no hay búsqueda, mostrar todos los items menú
 
+            if(items.isEmpty()) {
+                items = itemMenuService.obtenerTodosLosItemsMenu();
+                model.addAttribute("ERROR", "No se encontraron items menú.");
+                model.addAttribute("search", search);
+                model.addAttribute("items", items);
+
+                return "panelItemsMenu";
+            }
+
             model.addAttribute("itemsMenu", items);
             model.addAttribute("search", search);  
             return "panelItemsMenu";  
         
         } catch (ItemMenuNotFoundException e) {
+            items = itemMenuService.obtenerTodosLosItemsMenu();
             model.addAttribute("ERROR", "No se encontró el item menú.");
+            model.addAttribute("search", search);
+            model.addAttribute("items", items);
+
             return "panelItemsMenu";  
         }
     }

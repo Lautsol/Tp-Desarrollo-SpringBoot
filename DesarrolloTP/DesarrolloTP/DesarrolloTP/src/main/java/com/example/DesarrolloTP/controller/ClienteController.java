@@ -114,12 +114,25 @@ public class ClienteController {
                 
             } else clientes = clienteService.obtenerTodosLosClientes(); // Si no hay búsqueda, mostrar todos los clientes
 
+            if(clientes.isEmpty()) {
+                clientes = clienteService.obtenerTodosLosClientes();
+                model.addAttribute("ERROR", "No se encontraron clientes.");
+                model.addAttribute("search", search);
+                model.addAttribute("clientes", clientes);
+
+                return "panelClientes";
+            }
+
             model.addAttribute("clientes", clientes);
             model.addAttribute("search", search);  
             return "panelClientes";  
 
         } catch (ClienteNotFoundException e) {
+            clientes = clienteService.obtenerTodosLosClientes();
             model.addAttribute("ERROR", "No se encontró el cliente.");
+            model.addAttribute("search", search);
+            model.addAttribute("clientes", clientes);
+
             return "panelClientes";  
         }
     }

@@ -331,7 +331,11 @@ public class PedidoController {
 
             if (searchType == null || searchType.isEmpty() || searchQuery == null || searchQuery.trim().isEmpty()) {
                 pedidos = pedidoService.obtenerTodosLosPedidos();
+                model.addAttribute("ERROR", "Seleccione un criterio de búsqueda e ingrese un valor.");
+                model.addAttribute("searchQuery", searchQuery);
+                model.addAttribute("searchType", searchType);
                 model.addAttribute("pedidos", pedidos);
+                
                 return "panelPedidos";
             }
             
@@ -350,11 +354,26 @@ public class PedidoController {
                     break;
             }
 
+            if (pedidos.isEmpty()) {
+                pedidos = pedidoService.obtenerTodosLosPedidos();
+                model.addAttribute("ERROR", "No se encontraron pedidos.");
+                model.addAttribute("searchQuery", searchQuery);
+                model.addAttribute("searchType", searchType);
+                model.addAttribute("pedidos", pedidos);
+                
+                return "panelPedidos";
+            }
+
             model.addAttribute("pedidos", pedidos);
             return "panelPedidos"; 
 
         } catch(PedidoNotFoundException e) {
+            List<Pedido> pedidos = pedidoService.obtenerTodosLosPedidos();
             model.addAttribute("ERROR", "No se encontró el pedido.");
+            model.addAttribute("searchQuery", searchQuery);
+            model.addAttribute("searchType", searchType);
+            model.addAttribute("pedidos", pedidos);
+            
             return "panelPedidos"; 
         }
     }

@@ -137,19 +137,23 @@
     <!-- Contenido principal -->
     <div class="main-content">
 
+        <div class="error-message" th:if="${ERROR != null}">
+            <p th:text="${ERROR}" style="color: red; font-weight: bold; font-size: 14px; margin: 10px 0;"></p>
+        </div>
+
         <!-- Formulario de búsqueda -->
         <div class="search-bar">
             <form action="/pedidos" method="get">
                 <!-- Dropdown para seleccionar el tipo de búsqueda -->
                 <select name="searchType">
-                    <option value="" disabled selected>Buscar por...</option>
-                    <option value="idPedido">ID pedido</option>
-                    <option value="idCliente">ID cliente</option>
-                    <option value="idVendedor">ID vendedor</option>
+                    <option value="" disabled th:selected="${searchType == null}">Buscar por...</option>
+                    <option value="idPedido" th:selected="${searchType == 'idPedido'}">ID pedido</option>
+                    <option value="idCliente" th:selected="${searchType == 'idCliente'}">ID cliente</option>
+                    <option value="idVendedor" th:selected="${searchType == 'idVendedor'}">ID vendedor</option>
                 </select>
 
                 <!-- Campo de texto para ingresar el término de búsqueda -->
-                <input type="text" name="searchQuery" placeholder="">
+                <input type="text" name="searchQuery" placeholder="Buscar..." th:value="${searchQuery}">
 
                 <!-- Botón para realizar la búsqueda -->
                 <button type="submit">Buscar</button>

@@ -190,12 +190,25 @@ public class VendedorController {
 
             } else vendedores = vendedorService.obtenerTodosLosVendedores(); // Si no hay búsqueda, mostrar todos los vendedores
 
+            if(vendedores.isEmpty()) {
+                vendedores = vendedorService.obtenerTodosLosVendedores();
+                model.addAttribute("ERROR", "No se encontraron vendedores.");
+                model.addAttribute("search", search);
+                model.addAttribute("vendedores", vendedores);
+
+                return "panelVendedores";
+            }
+
             model.addAttribute("vendedores", vendedores);
             model.addAttribute("search", search);  
             return "panelVendedores";  
         
         } catch (VendedorNotFoundException e) {
+            vendedores = vendedorService.obtenerTodosLosVendedores();
             model.addAttribute("ERROR", "No se encontró el vendedor.");
+            model.addAttribute("search", search);
+            model.addAttribute("vendedores", vendedores);
+
             return "panelVendedores";  
         }
     }

@@ -136,10 +136,14 @@
         <!-- Contenido principal -->
         <div class="main-content">
 
+            <div class="error-message" th:if="${ERROR != null}">
+                <p th:text="${ERROR}" style="color: red; font-weight: bold; font-size: 14px; margin: 10px 0;"></p>
+            </div>
+            
             <!-- Formulario de búsqueda -->
             <div class="search-bar">
                 <form action="/items-menu" method="get">
-                    <input type="text" name="search" placeholder="Buscar por nombre o ID" value=""/>
+                    <input type="text" name="search" placeholder="Buscar por nombre o ID" th:value="${search} />
                     <button type="submit">Buscar</button>
                 </form>
             </div>

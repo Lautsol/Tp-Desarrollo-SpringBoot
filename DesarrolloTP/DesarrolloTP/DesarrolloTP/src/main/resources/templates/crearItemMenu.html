@@ -107,9 +107,18 @@
             <div class="input-group">
                 <label for="tipoItem">Tipo de item</label>
                 <select id="tipoItem" name="tipoItem">
-                    <option value="Gaseosa">Gaseosa</option>
-                    <option value="Alcohol">Alcohol</option>
-                    <option value="Plato">Plato</option >
+                    <option value="Plato" 
+                            th:selected="${itemMenu != null and itemMenu.getClass().getSimpleName().equals('Plato')}">
+                        Plato
+                    </option>
+                    <option value="Gaseosa" 
+                            th:selected="${itemMenu != null and itemMenu.getClass().getSimpleName().equals('Gaseosa')}">
+                        Gaseosa
+                    </option>
+                    <option value="Alcohol" 
+                            th:selected="${itemMenu != null and itemMenu.getClass().getSimpleName().equals('Alcohol')}">
+                        Alcohol
+                    </option>
                 </select>
             </div>
             

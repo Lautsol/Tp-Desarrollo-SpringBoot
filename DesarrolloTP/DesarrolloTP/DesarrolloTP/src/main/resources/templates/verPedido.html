@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar cliente</title>
+    <title>Ver pedido</title>
     <style>
         /* Estilos generales */
         body {
@@ -125,6 +125,11 @@
 
             <!-- Campos principales -->
             <div class="input-group">
+                <label for="id">ID pedido</label> 
+                <input type="number" id="id" name="id" readonly th:value="${pedido.id_pedido}" />
+            </div>
+            
+            <div class="input-group">
                 <label for="idCliente">ID cliente</label>
                 <input type="text" id="idCliente" name="idCliente" readonly th:value="${pedido.cliente == null ? 'No disponible' : pedido.cliente.id}" />
             </div>
@@ -156,7 +161,7 @@
             </div>
 
             <!-- Lista de items del pedido -->
-            <h2 style="margin-top: 30px;">Items del pedido</h2>
+            <h2 style="margin-top: 30px; color: #333; font-size: 20px;">Detalles del pedido</h2>
             <table>
                 <thead>
                     <tr>

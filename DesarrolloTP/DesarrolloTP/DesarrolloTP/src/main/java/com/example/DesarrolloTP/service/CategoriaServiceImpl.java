@@ -16,7 +16,6 @@ public class CategoriaServiceImpl implements CategoriaService {
     
     public Categoria buscarCategoria(int id) throws CategoriaNotFoundException {
         return categoriaRepository.findById(id).orElseThrow(()-> new CategoriaNotFoundException());
-    
     }
     
     public List<Categoria> obtenerTodasLasCategorias() {
@@ -24,7 +23,6 @@ public class CategoriaServiceImpl implements CategoriaService {
         List<Categoria> listaCategorias = new ArrayList<>();
         iterableCategorias.forEach(listaCategorias::add);
         return listaCategorias;
-                
     }
 
 }

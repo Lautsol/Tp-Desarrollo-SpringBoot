@@ -123,7 +123,6 @@ public class VendedorController {
             return "redirect:/panelVendedores.html"; 
     
         } catch (Exception e) {
-            model.addAttribute("ERROR", "Ocurrió un error al guardar el vendedor.");
             return "errorPage";
         }
     }
@@ -155,7 +154,6 @@ public class VendedorController {
             return "editarVendedor";
     
         } catch (Exception e) {
-            model.addAttribute("ERROR", "Ocurrió un error al cargar el vendedor.");
             return "errorPage"; 
         }
     }
@@ -167,7 +165,6 @@ public class VendedorController {
             vendedorService.eliminarVendedor(id);
             return "redirect:/panelVendedores.html"; 
         } catch (Exception e) {
-            model.addAttribute("ERROR", "Ocurrió un error al eliminar el vendedor.");
             return "errorPage"; 
         }
     }
@@ -198,7 +195,7 @@ public class VendedorController {
             return "panelVendedores";  
         
         } catch (VendedorNotFoundException e) {
-            model.addAttribute("ERROR", "No se encontraron vendedores.");
+            model.addAttribute("ERROR", "No se encontró el vendedor.");
             return "panelVendedores";  
         }
     }

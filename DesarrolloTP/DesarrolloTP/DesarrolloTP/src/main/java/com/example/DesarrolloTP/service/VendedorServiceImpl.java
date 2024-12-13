@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +23,7 @@ public class VendedorServiceImpl implements VendedorService {
     private PedidoRepository pedidoRepository;
     
     public Vendedor crearVendedor(Vendedor vendedor) {
-         return vendedorRepository.save(vendedor);
+        return vendedorRepository.save(vendedor);
     }
      
     public Vendedor modificarVendedor(Vendedor vendedor, List<ItemMenu> itemsAEliminar) {
@@ -54,8 +53,8 @@ public class VendedorServiceImpl implements VendedorService {
         Vendedor vendedor = vendedorRepository.findById(id).get();
 
         for(Pedido pedido : vendedor.getPedidos()) {
-        pedido.setVendedor(null);
-        pedidoRepository.save(pedido);
+            pedido.setVendedor(null);
+            pedidoRepository.save(pedido);
         }
 
         vendedorRepository.deleteById(id);

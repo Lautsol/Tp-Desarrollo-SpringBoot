@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crear cliente</title>
     <style>
-        /* Estilos generales */
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
@@ -30,50 +29,41 @@
 
         .input-group {
             margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
         }
 
         .input-group label {
             font-weight: bold;
-            display: block;
             margin-bottom: 5px;
         }
 
-        .input-group input {
+        .input-group input,
+        .input-group select {
             width: 100%;
             padding: 10px;
             font-size: 16px;
             border: 1px solid #ddd;
             border-radius: 4px;
+            box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
+        }
+
+        .input-group input[type="number"] {
+            -moz-appearance: textfield; /* Elimina los controles numéricos */
+        }
+
+        .input-group input[type="number"]::-webkit-outer-spin-button,
+        .input-group input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
         }
 
         .error {
-        color: red;
-        font-size: 15px;
-        margin-top: 5px;
+            color: red;
+            font-size: 15px;
+            margin-top: 5px;
         }
 
-        /* Estilo para la tabla */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        table th, table td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        table th {
-            background-color: #f2f2f2;
-        }
-
-        table tr:hover {
-            background-color: #f9f9f9;
-        }
-
-        /* Estilo para los botones */
         button {
             display: inline-block;
             padding: 10px 20px;
@@ -84,7 +74,6 @@
             transition: background-color 0.3s;
         }
 
-        /* Botón "Guardar" */
         button.save-btn {
             background-color: #4CAF50;
             color: white;
@@ -95,7 +84,6 @@
             background-color: #45a049;
         }
 
-        /* Botón "Cancelar" */
         button.cancel-btn {
             background-color: #e74c3c;
             color: white;
@@ -106,7 +94,7 @@
         button.cancel-btn:hover {
             background-color: #c0392b;
         }
-
+        
         /* Estilo para el checkbox */
         input[type="checkbox"] {
             margin: 10px;

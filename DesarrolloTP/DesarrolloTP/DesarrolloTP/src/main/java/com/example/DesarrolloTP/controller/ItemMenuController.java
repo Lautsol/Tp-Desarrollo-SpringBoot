@@ -97,7 +97,6 @@ public class ItemMenuController {
 
             return "redirect:/panelItemsMenu.html";  
         } catch (Exception e) {
-            model.addAttribute("ERROR", "Ocurrió un error al guardar el item de menú.");
             return "errorPage";  
         }
     }
@@ -115,7 +114,6 @@ public class ItemMenuController {
             return "editarItemMenu"; 
 
         } catch (Exception e) {
-            model.addAttribute("ERROR", "Ocurrió un error al cargar el item menú.");
             return "errorPage";
         }
     }
@@ -127,7 +125,6 @@ public class ItemMenuController {
             itemMenuService.eliminarItemMenu(id);
             return "redirect:/panelItemsMenu.html"; 
         } catch (Exception e) {
-            model.addAttribute("ERROR", "Ocurrió un error al eliminar el item menú.");
             return "errorPage"; 
         }
     }
@@ -158,7 +155,7 @@ public class ItemMenuController {
             return "panelItemsMenu";  
         
         } catch (ItemMenuNotFoundException e) {
-            model.addAttribute("ERROR", "No se encontraron items menú.");
+            model.addAttribute("ERROR", "No se encontró el item menú.");
             return "panelItemsMenu";  
         }
     }

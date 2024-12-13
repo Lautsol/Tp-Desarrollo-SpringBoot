@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear pedido</title>
+    <title>Editar cliente</title>
     <style>
         /* Estilos generales */
         body {
@@ -30,26 +30,39 @@
 
         .input-group {
             margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
         }
 
         .input-group label {
             font-weight: bold;
-            display: block;
             margin-bottom: 5px;
         }
 
-        .input-group input, .input-group select {
+        .input-group input,
+        .input-group select {
             width: 100%;
             padding: 10px;
             font-size: 16px;
             border: 1px solid #ddd;
             border-radius: 4px;
+            box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
+        }
+
+        .input-group input[type="number"] {
+            -moz-appearance: textfield; /* Elimina los controles numéricos */
+        }
+
+        .input-group input[type="number"]::-webkit-outer-spin-button,
+        .input-group input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
         }
 
         .error {
-        color: red;
-        font-size: 15px;
-        margin-top: 5px;
+            color: red;
+            font-size: 15px;
+            margin-top: 5px;
         }
 
         table {
@@ -61,7 +74,7 @@
 
         table th, table td {
             padding: 12px;
-            text-align: left;
+            text-align: center;
             border-bottom: 1px solid #ddd;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -73,10 +86,6 @@
 
         table tr:hover {
             background-color: #f9f9f9;
-        }
-
-        table td:last-child, table th:last-child {
-            text-align: center;
         }
 
         button {

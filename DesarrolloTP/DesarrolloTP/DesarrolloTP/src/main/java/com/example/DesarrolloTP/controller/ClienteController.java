@@ -7,7 +7,6 @@ import com.example.DesarrolloTP.service.ClienteService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -65,7 +64,6 @@ public class ClienteController {
             return "redirect:/panelClientes.html"; 
 
         } catch (Exception e) {
-            model.addAttribute("ERROR", "Ocurrió un error al guardar el cliente.");
             return "errorPage"; 
         }
     }
@@ -77,7 +75,6 @@ public class ClienteController {
             clienteService.eliminarCliente(id);;
             return "redirect:/panelClientes.html"; 
         } catch (Exception e) {
-            model.addAttribute("ERROR", "Ocurrió un error al eliminar el cliente.");
             return "errorPage"; 
         }
     }
@@ -93,7 +90,6 @@ public class ClienteController {
             return "editarCliente";
     
         } catch (Exception e) {
-            model.addAttribute("ERROR", "Ocurrió un error al cargar el cliente.");
             return "errorPage"; 
         }
     }
@@ -123,7 +119,7 @@ public class ClienteController {
             return "panelClientes";  
 
         } catch (ClienteNotFoundException e) {
-            model.addAttribute("ERROR", "No se encontraron clientes.");
+            model.addAttribute("ERROR", "No se encontró el cliente.");
             return "panelClientes";  
         }
     }

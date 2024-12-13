@@ -17,7 +17,6 @@ import com.example.DesarrolloTP.service.PedidoService;
 import com.example.DesarrolloTP.service.VendedorNotFoundException;
 import com.example.DesarrolloTP.service.VendedorService;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,7 +117,7 @@ public class PedidoController {
                                 @RequestParam Map<String, String> itemCantidad,
                                 @RequestParam Map<String, String> itemIds,
                                 Model model) {
-
+        
         List<Integer> selectedItemIds = new ArrayList<>();
 
         // Obtener items seleccionados
@@ -134,27 +133,25 @@ public class PedidoController {
         Map<String, String> errores = pedidoService.validarPedido(idCliente, idVendedor, selectedItemIds);
 
         try {
-
-            if(errores != null && !errores.isEmpty()) {
-
-                Vendedor vendedor = vendedorService.buscarPorId(idVendedor);
-        
-                List<ItemMenu> itemsMenu = vendedor.getItems();  
-            
-                model.addAttribute("errores", errores);
-                model.addAttribute("idCliente", idCliente);
-                model.addAttribute("idVendedor", idVendedor);
-                model.addAttribute("metodoPago", metodoPago);
-                model.addAttribute("estado", "EN_PROCESO");
-                model.addAttribute("itemsMenu", itemsMenu);
-
-                return "crearPedido";  
-            }
-
             Cliente cliente = clienteService.buscarPorId(idCliente);
             Vendedor vendedor = vendedorService.buscarPorId(idVendedor);
 
             if(pedido.getId_pedido() == 0) { 
+
+                if(errores != null && !errores.isEmpty()) {
+            
+                    List<ItemMenu> itemsMenu = vendedor.getItems();  
+                
+                    model.addAttribute("errores", errores);
+                    model.addAttribute("idCliente", idCliente);
+                    model.addAttribute("idVendedor", idVendedor);
+                    model.addAttribute("metodoPago", metodoPago);
+                    model.addAttribute("estado", "EN_PROCESO");
+                    model.addAttribute("itemsMenu", itemsMenu);
+
+                    return "crearPedido";  
+                }
+                
                 pedido = cliente.iniciarPedido(vendedor);
 
                 for (Map.Entry<String, String> entry : itemCantidad.entrySet()) {
@@ -175,17 +172,17 @@ public class PedidoController {
 
                 cliente.confirmarPedido(TipoDePago.valueOf(metodoPago));
                 pedidoService.crearPedido(pedido);
-
-        } else if(Estado.valueOf(estado) == Estado.EN_ENVIO) {
-                pedido.setEstado(Estado.EN_PROCESO);
-                cliente.agregarPedido(pedido);
-                vendedor.agregarPedido(pedido);
-                cliente.suscripcionEstadoPedido(pedido);
-                vendedor.cambiarEstadoPedido(pedido);
-                cliente.getPedidos().remove(pedido);
-                vendedor.getPedidos().remove(pedido);
-                pedido = pedidoService.modificarPedido(pedido);
-        }
+            
+            } else if(Estado.valueOf(estado) == Estado.EN_ENVIO) {
+                    pedido.setEstado(Estado.EN_PROCESO);
+                    cliente.agregarPedido(pedido);
+                    vendedor.agregarPedido(pedido);
+                    cliente.suscripcionEstadoPedido(pedido);
+                    vendedor.cambiarEstadoPedido(pedido);
+                    cliente.getPedidos().remove(pedido);
+                    vendedor.getPedidos().remove(pedido);
+                    pedido = pedidoService.modificarPedido(pedido);
+                }
 
         return "redirect:/panelPedidos.html";  
 
@@ -196,6 +193,7 @@ public class PedidoController {
             model.addAttribute("idVendedor", idVendedor);
             model.addAttribute("metodoPago", metodoPago);
             model.addAttribute("estado", "EN_PROCESO");
+
             return "crearPedido";  
 
         } catch (ClienteNotFoundException e2) {
@@ -224,11 +222,12 @@ public class PedidoController {
                 model.addAttribute("idVendedor", idVendedor);
                 model.addAttribute("metodoPago", metodoPago);
                 model.addAttribute("estado", "EN_PROCESO");
+
                 return "crearPedido";  
             }
 
         } catch (ItemMenuNotFoundException e3) {
-            model.addAttribute("ERROR", "Item no encontrado");
+            model.addAttribute("ERROR", "Item no encontrado.");
             return "crearPedido"; 
         }
     }
@@ -268,7 +267,6 @@ public class PedidoController {
             return "editarPedido";
     
         } catch (Exception e) {
-            model.addAttribute("ERROR", "Ocurrió un error al cargar el pedido.");
             return "errorPage"; 
         }
     }
@@ -308,7 +306,6 @@ public class PedidoController {
             return "verPedido";
     
         } catch (Exception e) {
-            model.addAttribute("ERROR", "Ocurrió un error al cargar el pedido.");
             return "errorPage"; 
         }
     }
@@ -320,7 +317,6 @@ public class PedidoController {
             pedidoService.eliminarPedido(id);
             return "redirect:/panelPedidos.html";
         } catch (Exception e) {
-            model.addAttribute("ERROR", "Ocurrió un error al eliminar el pedido.");
             return "errorPage"; 
         }
     }
@@ -358,7 +354,7 @@ public class PedidoController {
             return "panelPedidos"; 
 
         } catch(PedidoNotFoundException e) {
-            model.addAttribute("ERROR", "Pedido no encontrado.");
+            model.addAttribute("ERROR", "No se encontró el pedido.");
             return "panelPedidos"; 
         }
     }

@@ -157,10 +157,15 @@
             <div class="input-group">
                 <label for="nombre">Nombre</label>
                 <input type="text" id="nombre" name="nombre" th:value="${vendedor.nombre}" placeholder="Ingrese el nombre del vendedor" />
+                <!-- Mostrar error si existe -->
+                <div th:if="${errores != null and errores['nombre'] != null}" class="error" th:text="${errores['nombre']}"></div>
             </div>
+            
             <div class="input-group">
                 <label for="direccion">Dirección</label>
                 <input type="text" id="direccion" name="direccion" th:value="${vendedor.direccion}" placeholder="Ingrese la dirección del vendedor" />
+                <!-- Mostrar error si existe -->
+                <div th:if="${errores != null and errores['direccion'] != null}" class="error" th:text="${errores['direccion']}"></div>
             </div>
 
             <!-- Ítems actuales del vendedor -->

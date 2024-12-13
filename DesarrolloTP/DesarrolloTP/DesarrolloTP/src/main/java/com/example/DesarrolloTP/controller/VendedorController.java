@@ -110,6 +110,9 @@ public class VendedorController {
                         }
                     }
 
+                    vendedorEditar.setNombre(vendedor.getNombre());
+                    vendedorEditar.setDireccion(vendedor.getDireccion());
+                    
                     model.addAttribute("vendedor", vendedorEditar);
                     model.addAttribute("itemsMenuDisponibles", itemsMenuDisponibles);
                     model.addAttribute("itemsEliminar", itemsEliminarIds);

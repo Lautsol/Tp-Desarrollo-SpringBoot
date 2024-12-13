@@ -1,232 +1,250 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Pedidos</title>
-    <meta charset="UTF-8"/>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            display: flex;
-            height: 100vh;
-        }
+    <head>
+        <title>Pedidos</title>
+        <meta charset="UTF-8"/>
 
-        .sidebar {
-            width: 200px;
-            background-color: #2c3e50;
-            color: white;
-            padding: 20px;
-            box-sizing: border-box;
-        }
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                display: flex;
+                height: 100vh;
+            }
 
-        .sidebar h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
+            .sidebar {
+                width: 200px;
+                background-color: #2c3e50;
+                color: white;
+                padding: 20px;
+                box-sizing: border-box;
+            }
 
-        .sidebar a {
-            display: block;
-            color: white;
-            text-decoration: none;
-            padding: 10px 0;
-            border-bottom: 1px solid #34495e;
-        }
+            .sidebar h2 {
+                text-align: center;
+                margin-bottom: 20px;
+            }
 
-        .sidebar a:hover {
-            background-color: #34495e;
-        }
+            .sidebar a {
+                display: block;
+                color: white;
+                text-decoration: none;
+                padding: 10px 0;
+                border-bottom: 1px solid #34495e;
+            }
 
-        .main-content {
-            flex: 1;
-            padding: 20px;
-            box-sizing: border-box;
-        }
+            .main-content {
+                flex: 1;
+                padding: 20px;
+                box-sizing: border-box;
+            }
 
-        .search-bar {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
+            .search-bar {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 20px;
+            }
 
-        .search-bar select {
-            padding: 10px;
-            font-size: 16px;
-            width: 200px;
-        }
+            .search-bar select {
+                padding: 10px;
+                font-size: 16px;
+                width: 200px;
+            }
 
-        .search-bar input {
-            flex: 1;
-            padding: 10px;
-            font-size: 16px;
-        }
+            .search-bar input {
+                flex: 1;
+                padding: 10px;
+                font-size: 16px;
+            }
 
-        .search-bar button {
-            padding: 10px 15px;
-            background-color: #3498db;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
+            .search-bar button {
+                padding: 10px 15px;
+                font-size: 15px;
+                background-color: #3498db;
+                color: white;
+                border: none;
+                cursor: pointer;
+            }
 
-        .search-bar button:hover {
-            background-color: #2980b9;
-        }
+            .search-bar .reset-btn {
+                padding: 10px 15px;
+                font-size: 15px; 
+                background-color: #95a5a6;
+                color: white;
+                border: none;
+                cursor: pointer;
+            }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 10px;
+            }
 
-        table, th, td {
-            border: 1px solid #ddd;
-        }
+            table, th, td {
+                border: 1px solid #ddd;
+            }
 
-        th, td {
-            padding: 10px;
-            text-align: center;
-        }
+            th, td {
+                padding: 10px;
+                text-align: center;
+            }
 
-        th {
-            background-color: #f4f4f4;
-        }
+            th {
+                background-color: #f4f4f4;
+            }
 
-        .action-buttons button {
-            padding: 5px 10px;
-            margin-right: 5px;
-        }
+           /* Estilo para el contenedor de los botones de acción */
+           .action-buttons {
+                display: flex;  
+                gap: 10px;      
+                justify-content: center;  
+                align-items: center;  
+            }
 
-        .edit-btn {
-            background-color: #3498db;
-            color: white;
-            border: none;
-        }
+            .action-buttons button {
+                padding: 5px 10px;  
+                min-width: 70px;     
+                text-align: center;  
+                display: inline-block;  
+            }
 
-        .delete-btn {
-            background-color: #e74c3c;
-            color: white;
-            border: none;
-        }
+            .edit-btn {
+                background-color: #3498db;
+                color: white;
+                border: none;
+            }
 
-        .create-btn {
-            background-color: #2ecc71;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            margin-bottom: 20px;
-            cursor: pointer;
-        }
+            .delete-btn {
+                background-color: #e74c3c;
+                color: white;
+                border: none;
+            }
 
-        .create-btn:hover {
-            background-color: #27ae60;
-        }
-    </style>
-</head>
-<body>
+            .create-btn {
+                background-color: #2ecc71;
+                color: white;
+                padding: 10px 15px;
+                border: none;
+                margin-bottom: 20px;
+                cursor: pointer;
+            }
 
-    <!-- Barra lateral -->
-    <div class="sidebar">
-        <h2>Panel</h2>
-        <a href="panelVendedores.html">Vendedores</a>
-        <a href="panelClientes.html">Clientes</a>
-        <a href="panelItemsMenu.html">Items Menú</a>
-        <a href="panelPedidos.html">Pedidos</a>
-    </div>
+            .create-btn:hover {
+                background-color: #27ae60;
+            }
+        </style>
+    </head>
+    <body>
 
-    <!-- Contenido principal -->
-    <div class="main-content">
-
-        <div class="error-message" th:if="${ERROR != null}">
-            <p th:text="${ERROR}" style="color: red; font-weight: bold; font-size: 14px; margin: 10px 0;"></p>
+        <!-- Barra lateral -->
+        <div class="sidebar">
+            <h2>Panel</h2>
+            <a href="panelVendedores.html">Vendedores</a>
+            <a href="panelClientes.html">Clientes</a>
+            <a href="panelItemsMenu.html">Items Menú</a>
+            <a href="panelPedidos.html">Pedidos</a>
         </div>
 
-        <!-- Formulario de búsqueda -->
-        <div class="search-bar">
-            <form action="/pedidos" method="get">
-                <!-- Dropdown para seleccionar el tipo de búsqueda -->
-                <select name="searchType">
-                    <option value="" disabled th:selected="${searchType == null}">Buscar por...</option>
-                    <option value="idPedido" th:selected="${searchType == 'idPedido'}">ID pedido</option>
-                    <option value="idCliente" th:selected="${searchType == 'idCliente'}">ID cliente</option>
-                    <option value="idVendedor" th:selected="${searchType == 'idVendedor'}">ID vendedor</option>
-                </select>
+        <!-- Contenido principal -->
+        <div class="main-content">
 
-                <!-- Campo de texto para ingresar el término de búsqueda -->
-                <input type="text" name="searchQuery" placeholder="Buscar..." th:value="${searchQuery}">
+            <div class="error-message" th:if="${ERROR != null}">
+                <p th:text="${ERROR}" style="color: red; font-weight: bold; font-size: 14px; margin: 10px 0;"></p>
+            </div>
 
-                <!-- Botón para realizar la búsqueda -->
-                <button type="submit">Buscar</button>
-            </form>
+            <!-- Formulario de búsqueda -->
+            <div class="search-bar">
+                <form action="/pedidos" method="get" style="display: flex; align-items: center; gap: 10px;">
+                    <!-- Dropdown para seleccionar el tipo de búsqueda -->
+                    <select name="searchType">
+                        <option value="" disabled th:selected="${searchType == null}">Buscar por...</option>
+                        <option value="idPedido" th:selected="${searchType == 'idPedido'}">ID pedido</option>
+                        <option value="idCliente" th:selected="${searchType == 'idCliente'}">ID cliente</option>
+                        <option value="idVendedor" th:selected="${searchType == 'idVendedor'}">ID vendedor</option>
+                    </select>
+            
+                    <!-- Campo de texto para ingresar el término de búsqueda -->
+                    <input type="text" name="searchQuery" placeholder="Buscar..." th:value="${searchQuery}">
+            
+                    <!-- Botón para realizar la búsqueda -->
+                    <button type="submit">Buscar</button>
+            
+                    <!-- Botón para reiniciar la búsqueda -->
+                    <a href="/pedidos">
+                        <button type="button" class="reset-btn">Reiniciar búsqueda</button>
+                    </a>
+                </form>
+            </div>            
+
+            <div class="create-pedido-button">
+                <a href="/pedidos/0/crear">
+                    <button class="create-btn">Crear pedido</button>
+                </a>
+            </div>
+
+            <!-- Sección de pedidos -->
+            <div id="pedidos" class="section">
+                <h2>Pedidos</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID pedido</th>
+                            <th>ID cliente</th>
+                            <th>ID vendedor</th>
+                            <th>Total</th>
+                            <th>Forma de pago</th>
+                            <th>Estado</th>
+                            <th>Fecha de pago</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="pedido : ${pedidos}">
+                            <td th:text="${pedido.id_pedido}">ID pedido</td>
+                        
+                            <!-- Verificar si cliente es nulo -->
+                            <td th:if="${pedido.cliente != null}" th:text="${pedido.cliente.id}">ID cliente</td>
+                            <td th:if="${pedido.cliente == null}">No disponible</td>
+                        
+                            <!-- Verificar si vendedor es nulo -->
+                            <td th:if="${pedido.vendedor != null}" th:text="${pedido.vendedor.id}">ID vendedor</td>
+                            <td th:if="${pedido.vendedor == null}">No disponible</td>
+                        
+                            <!-- Mostrar el total dependiendo del estado -->
+                            <td th:text="${pedido.estado.name() == 'RECIBIDO' ? pedido.formaDePago.monto : pedido.total}">Total</td>
+                        
+                            <!-- Mostrar la forma de pago -->
+                            <td th:text="${pedido.tipoPago}">Forma de pago</td>
+                        
+                            <!-- Mostrar el estado del pedido -->
+                            <td th:text="${pedido.estado}">Estado</td>
+
+                            <td th:text="${pedido.estado.name() == 'RECIBIDO' ? pedido.formaDePago.getFecha() : ''}">Fecha de pago</td>
+                        
+                            <td class="action-buttons">
+                                <!-- Deshabilitar los botones si el cliente o vendedor son nulos, o si el estado del pedido es RECIBIDO -->
+                                <a th:href="@{/pedidos/{id}/editar(id=${pedido.id_pedido})}" 
+                                th:if="${!(pedido.cliente == null or pedido.vendedor == null or pedido.estado.name() == 'RECIBIDO')}">
+                                    <button class="edit-btn">
+                                        Editar
+                                    </button>
+                                </a>
+                                <a th:href="@{/pedidos/{id}/detalles(id=${pedido.id_pedido})}" 
+                                th:if="${pedido.cliente == null or pedido.vendedor == null or pedido.estado.name() == 'RECIBIDO'}">
+                                    <button class="edit-btn">
+                                        Ver
+                                    </button>
+                                </a>
+                                <a href="#" th:href="@{/pedidos/{id}/eliminar(id=${pedido.id_pedido})}">
+                                    <button class="delete-btn">Eliminar</button>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-
-        <div class="create-pedido-button">
-            <a href="/pedidos/0/crear">
-                <button class="create-btn">Crear pedido</button>
-            </a>
-        </div>
-
-        <!-- Sección de pedidos -->
-        <div id="pedidos" class="section">
-            <h2>Pedidos</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID pedido</th>
-                        <th>ID cliente</th>
-                        <th>ID vendedor</th>
-                        <th>Total</th>
-                        <th>Forma de pago</th>
-                        <th>Estado</th>
-                        <th>Fecha de pago</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="pedido : ${pedidos}">
-                        <td th:text="${pedido.id_pedido}">ID pedido</td>
-                    
-                        <!-- Verificar si cliente es nulo -->
-                        <td th:if="${pedido.cliente != null}" th:text="${pedido.cliente.id}">ID cliente</td>
-                        <td th:if="${pedido.cliente == null}">No disponible</td>
-                    
-                        <!-- Verificar si vendedor es nulo -->
-                        <td th:if="${pedido.vendedor != null}" th:text="${pedido.vendedor.id}">ID vendedor</td>
-                        <td th:if="${pedido.vendedor == null}">No disponible</td>
-                    
-                        <!-- Mostrar el total dependiendo del estado -->
-                        <td th:text="${pedido.estado.name() == 'RECIBIDO' ? pedido.formaDePago.monto : pedido.total}">Total</td>
-                    
-                        <!-- Mostrar la forma de pago -->
-                        <td th:text="${pedido.tipoPago}">Forma de pago</td>
-                    
-                        <!-- Mostrar el estado del pedido -->
-                        <td th:text="${pedido.estado}">Estado</td>
-
-                        <td th:text="${pedido.estado.name() == 'RECIBIDO' ? pedido.formaDePago.getFecha() : ''}">Fecha de pago</td>
-                    
-                        <td class="action-buttons">
-                            <!-- Deshabilitar los botones si el cliente o vendedor son nulos, o si el estado del pedido es RECIBIDO -->
-                            <a th:href="@{/pedidos/{id}/editar(id=${pedido.id_pedido})}" 
-                            th:if="${!(pedido.cliente == null or pedido.vendedor == null or pedido.estado.name() == 'RECIBIDO')}">
-                                <button class="edit-btn">
-                                    Editar
-                                </button>
-                            </a>
-                            <a th:href="@{/pedidos/{id}/detalles(id=${pedido.id_pedido})}" 
-                            th:if="${pedido.cliente == null or pedido.vendedor == null or pedido.estado.name() == 'RECIBIDO'}">
-                                <button class="edit-btn">
-                                    Ver
-                                </button>
-                            </a>
-                            <a href="#" th:href="@{/pedidos/{id}/eliminar(id=${pedido.id_pedido})}">
-                                <button class="delete-btn">Eliminar</button>
-                            </a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</body>
+    </body>
 </html>

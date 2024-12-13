@@ -45,28 +45,41 @@
                 box-sizing: border-box;
             }
 
-            /* Estilo para la barra de búsqueda */
+            /* Barra de búsqueda */
             .search-bar {
-                margin-bottom: 20px;
+                margin-bottom: 20px; 
             }
 
             .search-bar input {
-                width: 80%;
-                padding: 10px;
-                font-size: 16px;
-                margin-right: 10px;
+                width: 55%; 
+                padding: 10px; 
+                font-size: 16px; 
             }
 
+            /* Botón de buscar */
             .search-bar button {
                 padding: 10px 15px;
-                background-color: #3498db;
+                font-size: 15px;
+                background-color: #3498db; /* Azul */
                 color: white;
                 border: none;
                 cursor: pointer;
             }
 
-            .search-bar button:hover {
-                background-color: #2980b9;
+            /* Botón de reiniciar búsqueda */
+            .search-bar .reset-btn {
+                padding: 10px 15px;
+                font-size: 15px; 
+                background-color: #95a5a6; 
+                color: white;
+                border: none;
+                cursor: pointer;
+            }
+
+            .search-bar form {
+                display: flex;
+                align-items: center;
+                gap: 10px; 
             }
 
             /* Estilo para la tabla */
@@ -89,10 +102,19 @@
                 background-color: #f4f4f4;
             }
 
-            /* Estilo para los botones de acción */
+            /* Estilo para el contenedor de los botones de acción */
+            .action-buttons {
+                display: flex;  
+                gap: 10px;      
+                justify-content: center;  
+                align-items: center;  
+            }
+
             .action-buttons button {
-                padding: 5px 10px;
-                margin-right: 5px;
+                padding: 5px 10px;  
+                min-width: 70px;     
+                text-align: center;  
+                display: inline-block;  
             }
 
             .edit-btn {
@@ -143,8 +165,16 @@
             <!-- Formulario de búsqueda -->
             <div class="search-bar">
                 <form action="/vendedores" method="get">
+                    <!-- Campo de texto para la búsqueda -->
                     <input type="text" name="search" placeholder="Buscar por nombre o ID" th:value="${search}" />
+                    
+                    <!-- Botón de búsqueda -->
                     <button type="submit">Buscar</button>
+
+                    <!-- Botón de reiniciar búsqueda -->
+                    <a href="/vendedores">
+                        <button type="button" class="reset-btn">Reiniciar búsqueda</button>
+                    </a>
                 </form>
             </div>
 

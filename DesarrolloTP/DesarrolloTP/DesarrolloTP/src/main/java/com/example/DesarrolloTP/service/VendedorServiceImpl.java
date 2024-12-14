@@ -4,7 +4,6 @@ package com.example.DesarrolloTP.service;
 import com.example.DesarrolloTP.model.ItemMenu;
 import com.example.DesarrolloTP.model.Pedido;
 import com.example.DesarrolloTP.model.Vendedor;
-import com.example.DesarrolloTP.repository.PedidoRepository;
 import com.example.DesarrolloTP.repository.VendedorRepository;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +19,7 @@ public class VendedorServiceImpl implements VendedorService {
     private VendedorRepository vendedorRepository;
 
     @Autowired
-    private PedidoRepository pedidoRepository;
+    private PedidoService pedidoService;
     
     public Vendedor crearVendedor(Vendedor vendedor) {
         return vendedorRepository.save(vendedor);
@@ -54,7 +53,7 @@ public class VendedorServiceImpl implements VendedorService {
 
         for(Pedido pedido : vendedor.getPedidos()) {
             pedido.setVendedor(null);
-            pedidoRepository.save(pedido);
+            pedidoService.modificarPedido(pedido);
         }
 
         vendedorRepository.deleteById(id);

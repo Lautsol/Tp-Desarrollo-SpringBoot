@@ -11,6 +11,6 @@ import org.springframework.stereotype.Repository;
 public interface ClienteRepository extends CrudRepository<Cliente,Integer> {
     
     public List<Cliente> findByNombreStartingWithIgnoreCase(String nombre);
-    public Cliente findByCuit(long cuit);
+    public Cliente findByCuit(Long cuit);
   
 }

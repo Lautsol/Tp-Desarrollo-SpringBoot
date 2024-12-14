@@ -139,10 +139,10 @@ public class PedidoController {
             if(pedido.getId_pedido() == 0) { 
 
                 if(cliente.getCbu() == null && metodoPago.equals("TRANSFERENCIA")) {
-                    errores.put("cbu", "Debe ingresar el CBU del cliente para utilizar esa forma de pago.");
+                    errores.put("cbu", "El cliente debe registrar su CBU para utilizar esa forma de pago.");
                 }
                 if((cliente.getAlias() == null || cliente.getAlias().isEmpty()) && metodoPago.equals("MERCADOPAGO")) {
-                    errores.put("alias", "Debe ingresar el alias del cliente para utilizar esa forma de pago.");
+                    errores.put("alias", "El cliente debe registrar su alias para utilizar esa forma de pago.");
                 }
                 
                 if(errores != null && !errores.isEmpty()) {

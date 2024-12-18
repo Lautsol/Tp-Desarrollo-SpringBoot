@@ -5,7 +5,9 @@ import com.example.DesarrolloTP.model.Cliente;
 import com.example.DesarrolloTP.model.Estado;
 import com.example.DesarrolloTP.model.ItemMenu;
 import com.example.DesarrolloTP.model.Pedido;
+import com.example.DesarrolloTP.model.PedidoDTO;
 import com.example.DesarrolloTP.model.PedidoDetalle;
+import com.example.DesarrolloTP.model.ProductoDeOtroVendedorException;
 import com.example.DesarrolloTP.model.TipoDePago;
 import com.example.DesarrolloTP.model.Vendedor;
 import com.example.DesarrolloTP.service.ClienteNotFoundException;
@@ -17,15 +19,21 @@ import com.example.DesarrolloTP.service.PedidoService;
 import com.example.DesarrolloTP.service.VendedorNotFoundException;
 import com.example.DesarrolloTP.service.VendedorService;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -51,6 +59,7 @@ public class PedidoController {
         return "panelPedidos"; 
     }
     
+    /* 
     @GetMapping("/pedidos/{id}/crear")
     public String mostrarFormularioCrearPedido(@PathVariable int id, Model model) {
 
@@ -280,6 +289,150 @@ public class PedidoController {
         }
     }
 
+    @GetMapping("/pedidos/{id}/eliminar")
+    public String eliminarPedido(@PathVariable int id, Model model) {
+        
+        try {
+            pedidoService.eliminarPedido(id);
+            return "redirect:/panelPedidos.html";
+        } catch (Exception e) {
+            return "errorPage"; 
+        }
+    }
+    */
+
+    @PostMapping("/pedidos/crear")
+    public ResponseEntity<?> crearPedido(@RequestBody PedidoDTO pedidoDTO) {
+
+        Integer idItem = null;
+        try {
+            List<Integer> selectedItemIds = new ArrayList<>();
+            Integer vendedorId = null;
+
+            // Obtener items seleccionados y verificar que todos sean del mismo vendedor
+            for (String key : pedidoDTO.getItemIds().keySet()) {
+                String value = pedidoDTO.getItemIds().get(key);
+                if(value != null && !value.trim().isEmpty()) {
+                    if(key.startsWith("itemIds_")) {
+                        int itemId = Integer.parseInt(value);
+                        selectedItemIds.add(itemId);
+
+                        // Obtener el vendedor del primer producto
+                        if (vendedorId == null) {
+                            idItem = itemId;
+                            ItemMenu item = itemMenuService.buscarPorId(itemId);
+                            vendedorId = buscarVendedorDelItem(item);  // Obtener el vendedor del item
+                        } else {
+                            ItemMenu item = itemMenuService.buscarPorId(itemId);
+                            Integer itemVendedorId = buscarVendedorDelItem(item);
+
+                            if (!itemVendedorId.equals(vendedorId)) throw new ProductoDeOtroVendedorException();
+                        }
+                    }
+                }
+            }
+
+            Map<String, String> errores = pedidoService.validarPedido(pedidoDTO.getIdCliente(), pedidoDTO.getIdVendedor(), selectedItemIds);
+            Cliente cliente = clienteService.buscarPorId(pedidoDTO.getIdCliente());
+            Vendedor vendedor = vendedorService.buscarPorId(pedidoDTO.getIdVendedor());
+
+            // Validaciones de CBU y alias según el método de pago
+            if (cliente.getCbu() == null && pedidoDTO.getMetodoPago().equals("TRANSFERENCIA")) {
+                errores.put("cbu", "El cliente debe registrar su CBU para utilizar esa forma de pago.");
+            }
+            if ((cliente.getAlias() == null || cliente.getAlias().isEmpty()) && pedidoDTO.getMetodoPago().equals("MERCADOPAGO")) {
+                errores.put("alias", "El cliente debe registrar su alias para utilizar esa forma de pago.");
+            }
+
+            if (errores != null && !errores.isEmpty()) {
+                return ResponseEntity.badRequest().body(errores);
+            }
+
+            // Crear el pedido
+            Pedido pedido = cliente.iniciarPedido(vendedor);
+            for (Map.Entry<String, String> entry : pedidoDTO.getItemCantidad().entrySet()) {
+                if (entry.getKey().startsWith("cantidad_")) {
+                    int itemId = Integer.parseInt(entry.getKey().substring("cantidad_".length()));
+                    if (pedidoDTO.getItemIds().containsKey("itemIds_" + itemId)) {
+                        ItemMenu item = itemMenuService.buscarPorId(itemId);
+                        int cantidad = Integer.parseInt(entry.getValue());
+
+                        PedidoDetalle pedidoDetalle = new PedidoDetalle();
+                        pedidoDetalle.setProducto(item);
+                        pedidoDetalle.setCantidad(cantidad);
+                        pedido.agregarPedidoDetalle(pedidoDetalle);
+                    }
+                }
+            }
+
+            cliente.confirmarPedido(TipoDePago.valueOf(pedidoDTO.getMetodoPago()));
+            pedidoService.crearPedido(pedido);
+
+            return ResponseEntity.ok("Pedido creado con éxito.");
+
+        } catch (VendedorNotFoundException e1) {
+            Map<String, String> error = new HashMap<>();
+            error.put("vendedor", "El vendedor no existe.");
+            return ResponseEntity.badRequest().body(error);
+            
+        } catch (ClienteNotFoundException e2) {
+            Map<String, String> error = new HashMap<>();
+            error.put("cliente", "El cliente no existe.");
+            return ResponseEntity.badRequest().body(error);
+            
+        } catch (ItemMenuNotFoundException e3) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No existe el item con ID " + idItem + ".");
+
+        } catch (ProductoDeOtroVendedorException e4) {
+            return ResponseEntity.badRequest().body("Todos los productos deben pertenecer al mismo vendedor.");
+        }
+    }
+
+    // Método para obtener el vendedor de un ítem
+    private Integer buscarVendedorDelItem(ItemMenu item) {
+        for (Vendedor vendedor : vendedorService.obtenerTodosLosVendedores()) {
+            for (ItemMenu itemMenu : vendedor.getItems()) {
+                if (itemMenu.getId() == item.getId()) {  
+                    return vendedor.getId();  
+                }
+            }
+        }
+        return null;  
+    }
+
+    @PutMapping("/pedidos/actualizar/{id}")
+    public ResponseEntity<?> modificarPedido(@PathVariable("id") Integer id) {
+
+        try {
+            Pedido pedido = pedidoService.buscarPorIdPedido(id);
+            Cliente cliente = pedido.getCliente();
+            Vendedor vendedor = pedido.getVendedor();
+
+            cliente.agregarPedido(pedido);
+            vendedor.agregarPedido(pedido);
+            cliente.suscripcionEstadoPedido(pedido);
+            vendedor.cambiarEstadoPedido(pedido);
+            cliente.getPedidos().remove(pedido);
+            vendedor.getPedidos().remove(pedido);
+            pedido = pedidoService.modificarPedido(pedido);
+            return ResponseEntity.ok("Pedido actualizado correctamente.");
+
+        } catch (PedidoNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pedido no encontrado.");
+        } 
+    }
+
+    @DeleteMapping("/pedidos/eliminar/{id}")
+    public ResponseEntity<?> eliminarPedido(@PathVariable int id) {
+        try {
+            pedidoService.eliminarPedido(id);
+            return ResponseEntity.ok("Pedido eliminado exitosamente.");
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar el pedido.");
+        }
+    }
+
     @GetMapping("/pedidos/{id}/detalles")
     public String mostrarPedido(@PathVariable int id, Model model) {
 
@@ -314,17 +467,6 @@ public class PedidoController {
 
             return "verPedido";
     
-        } catch (Exception e) {
-            return "errorPage"; 
-        }
-    }
-
-    @GetMapping("/pedidos/{id}/eliminar")
-    public String eliminarPedido(@PathVariable int id, Model model) {
-        
-        try {
-            pedidoService.eliminarPedido(id);
-            return "redirect:/panelPedidos.html";
         } catch (Exception e) {
             return "errorPage"; 
         }

@@ -8,12 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -30,6 +34,7 @@ public class ClienteController {
         return "panelClientes"; 
     }
 
+    /* 
     @GetMapping("/clientes/{id}/crear")
     public String mostrarFormulario(@PathVariable int id, Model model) {
 
@@ -93,6 +98,59 @@ public class ClienteController {
             return "errorPage"; 
         }
     }
+    */
+
+    @PostMapping("/clientes/crear")
+    public ResponseEntity<String> crearCliente(@RequestBody Cliente cliente) {
+
+        Map<String, String> errores = clienteService.validarCliente(cliente);
+
+        if (errores != null && !errores.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Errores: " + errores.toString());
+        }
+
+        try {
+            clienteService.crearCliente(cliente);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Cliente creado correctamente.");
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al crear el cliente.");
+        }
+    }
+
+    @PutMapping("/clientes/modificar/{id}")
+    public ResponseEntity<String> modificarCliente(@PathVariable int id, @RequestBody Cliente cliente) {
+
+        try {
+            clienteService.buscarPorId(id);
+            cliente.setId(id);
+            Map<String, String> errores = clienteService.validarCliente(cliente);
+
+            if (errores != null && !errores.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Errores: " + errores.toString());
+            }
+
+            clienteService.modificarCliente(cliente);
+            return ResponseEntity.status(HttpStatus.OK).body("Cliente modificado correctamente.");
+            
+        } catch(ClienteNotFoundException e1) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("El cliente no existe.");
+
+        } catch (Exception e2) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al modificar el cliente.");
+        }
+    }
+
+    @DeleteMapping("/clientes/eliminar/{id}")
+    public ResponseEntity<String> eliminarCliente(@PathVariable int id) {
+        try {
+            clienteService.eliminarCliente(id);
+            return ResponseEntity.status(HttpStatus.OK).body("Cliente eliminado correctamente.");
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar el cliente.");
+        }
+    }
 
     @GetMapping("/clientes")
     public String mostrarClientes(@RequestParam(value = "search", required = false) String search, Model model) {
@@ -136,5 +194,5 @@ public class ClienteController {
             return "panelClientes";  
         }
     }
-
 }
+

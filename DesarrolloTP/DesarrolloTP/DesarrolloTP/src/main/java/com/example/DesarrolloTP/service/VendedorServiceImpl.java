@@ -7,6 +7,7 @@ import com.example.DesarrolloTP.model.Vendedor;
 import com.example.DesarrolloTP.repository.VendedorRepository;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,17 +35,36 @@ public class VendedorServiceImpl implements VendedorService {
     
         List<ItemMenu> itemsExistentes = vendedorExistente.getItems();
     
-        // Agregar los items nuevos
-        List<ItemMenu> nuevosItems = vendedor.getItems();
-        for (ItemMenu itemNuevo : nuevosItems) {
-                itemsExistentes.add(itemNuevo);
+        // Crear una nueva lista para los items existentes y nuevos
+        List<ItemMenu> itemsCompletos = new ArrayList<>(itemsExistentes);
+
+        for (ItemMenu itemNuevo : vendedor.getItems()) {
+            boolean existe = false;
+            for (ItemMenu itemExistente : itemsCompletos) {
+                if (itemExistente.getId() == (itemNuevo.getId())) {
+                    existe = true;
+                    break;
+                }
+            }
+            
+            if (!existe) {
+                itemsCompletos.add(itemNuevo);
+            }
         }
+
+        vendedorExistente.setItems(itemsCompletos);
     
-        // Eliminar items
-        for (ItemMenu itemEliminar : itemsAEliminar) {
-            itemsExistentes.remove(itemEliminar);
+        Iterator<ItemMenu> iterator = vendedorExistente.getItems().iterator();
+        while (iterator.hasNext()) {
+            ItemMenu item = iterator.next();
+            for (ItemMenu itemAEliminar : itemsAEliminar) {
+                if (item.getId() == (itemAEliminar.getId())) {
+                    iterator.remove();  
+                    break;  
+                }
+            }
         }
-    
+
         return vendedorRepository.save(vendedorExistente);
     }
     

@@ -3,20 +3,25 @@ package com.example.DesarrolloTP.controller;
 
 import com.example.DesarrolloTP.model.ItemMenu;
 import com.example.DesarrolloTP.model.Vendedor;
+import com.example.DesarrolloTP.model.VendedorDTO;
+import com.example.DesarrolloTP.service.ItemMenuNotFoundException;
 import com.example.DesarrolloTP.service.ItemMenuService;
 import com.example.DesarrolloTP.service.VendedorNotFoundException;
 import com.example.DesarrolloTP.service.VendedorService;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -36,6 +41,7 @@ public class VendedorController {
         return "panelVendedores"; 
     }
     
+    /* 
     @GetMapping("/vendedores/{id}/crear")
     public String mostrarFormulario(@PathVariable int id, Model model) {
         
@@ -170,6 +176,97 @@ public class VendedorController {
             return "redirect:/panelVendedores.html"; 
         } catch (Exception e) {
             return "errorPage"; 
+        }
+    }
+    */
+
+    @PostMapping("/vendedores/crear")
+    public ResponseEntity<String> crearVendedor(@RequestBody VendedorDTO vendedorDTO) {
+
+        Integer itemID = null;
+        try {
+            Vendedor vendedor = new Vendedor();  
+            vendedor.setNombre(vendedorDTO.getNombre());
+            vendedor.setDireccion(vendedorDTO.getDireccion());
+
+            if (vendedorDTO.getItemIds() != null && !vendedorDTO.getItemIds().isEmpty()) {
+                for (Integer itemId : vendedorDTO.getItemIds()) {
+                    itemID = itemId;
+                    ItemMenu item = itemMenuService.buscarPorId(itemId);
+                    vendedor.agregarItem(item);
+                }
+            }
+
+            Map<String, String> errores = vendedorService.validarVendedor(vendedor);
+            if (errores != null && !errores.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Errores: " + errores.toString());
+            }
+
+            vendedorService.crearVendedor(vendedor);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Vendedor creado correctamente.");
+
+        } catch (ItemMenuNotFoundException e1) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No existe el item menú con ID: " + itemID + ".");
+
+        } catch (Exception e2) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al crear el vendedor.");
+        }
+    }
+
+    @PutMapping("/vendedores/modificar/{id}")
+    public ResponseEntity<String> modificarVendedor(@PathVariable Integer id, @RequestBody VendedorDTO vendedorDTO) {
+        
+        Integer itemID = null;
+        try {
+            Vendedor vendedor = vendedorService.buscarPorId(id);
+            vendedor.setNombre(vendedorDTO.getNombre());
+            vendedor.setDireccion(vendedorDTO.getDireccion());
+
+            if (vendedorDTO.getItemIds() != null && !vendedorDTO.getItemIds().isEmpty()) {
+                for (Integer itemId : vendedorDTO.getItemIds()) {
+                    itemID = itemId;
+                    ItemMenu item = itemMenuService.buscarPorId(itemId);
+                    vendedor.agregarItem(item);
+                }
+            }
+
+            List<ItemMenu> itemsAEliminar = new ArrayList<>();
+            if (vendedorDTO.getItemsEliminarIds() != null && !vendedorDTO.getItemsEliminarIds().isEmpty()) {
+                for (Integer itemId : vendedorDTO.getItemsEliminarIds()) {
+                    ItemMenu item = itemMenuService.buscarPorId(itemId);
+                    itemsAEliminar.add(item);
+                }
+            }
+
+            Map<String, String> errores = vendedorService.validarVendedor(vendedor, vendedorDTO.getItemsEliminarIds(), vendedorDTO.getItemIds());
+            if (errores != null && !errores.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Errores: " + errores.toString());
+            }
+
+            vendedorService.modificarVendedor(vendedor, itemsAEliminar);
+
+            return ResponseEntity.status(HttpStatus.OK).body("Vendedor modificado correctamente.");
+        
+        } catch (VendedorNotFoundException e1) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("El vendedor no existe.");
+        
+        } catch (ItemMenuNotFoundException e2) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No existe el item menú con ID: " + itemID  + ".");
+        
+        } catch (Exception e3) {
+            e3.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al modificar el vendedor.");
+        }
+    }
+
+    @DeleteMapping("/vendedores/eliminar/{id}")
+    public ResponseEntity<String> eliminarVendedor(@PathVariable int id) {
+        try {
+            vendedorService.eliminarVendedor(id);
+            return ResponseEntity.status(HttpStatus.OK).body("Vendedor eliminado correctamente.");
+            
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar el vendedor.");
         }
     }
 

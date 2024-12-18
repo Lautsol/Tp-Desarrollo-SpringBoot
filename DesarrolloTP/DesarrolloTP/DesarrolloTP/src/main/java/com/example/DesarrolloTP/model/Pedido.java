@@ -138,10 +138,9 @@ public class Pedido  extends PedidoObservable {
     }
 
     private double calcularPrecioFinal() {
-        total = formaDePago.calcularPrecio(total);
-        formaDePago.setMonto(total);
-        setTotal(total);
-        return total;
+        double montoFinal = formaDePago.calcularPrecio(total);
+        formaDePago.setMonto(montoFinal);
+        return montoFinal;
     }
     
     public double calcularPrecioFinal(double total) {

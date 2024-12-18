@@ -305,7 +305,7 @@ public class PedidoController {
         Integer idItem = null;
         try {
             List<Integer> selectedItemIds = new ArrayList<>();
-            Integer vendedorId = null;
+            Vendedor vendedor = vendedorService.buscarPorId(pedidoDTO.getIdVendedor());
 
             // Obtener items seleccionados y verificar que todos sean del mismo vendedor
             for (String key : pedidoDTO.getItemIds().keySet()) {
@@ -315,24 +315,14 @@ public class PedidoController {
                         int itemId = Integer.parseInt(value);
                         selectedItemIds.add(itemId);
 
-                        // Obtener el vendedor del primer producto
-                        if (vendedorId == null) {
-                            idItem = itemId;
-                            ItemMenu item = itemMenuService.buscarPorId(itemId);
-                            vendedorId = buscarVendedorDelItem(item);  // Obtener el vendedor del item
-                        } else {
-                            ItemMenu item = itemMenuService.buscarPorId(itemId);
-                            Integer itemVendedorId = buscarVendedorDelItem(item);
-
-                            if (!itemVendedorId.equals(vendedorId)) throw new ProductoDeOtroVendedorException();
-                        }
+                        ItemMenu item = itemMenuService.buscarPorId(itemId);
+                        if (!itemMenuVendedor(vendedor, item)) throw new ProductoDeOtroVendedorException();
                     }
                 }
             }
 
             Map<String, String> errores = pedidoService.validarPedido(pedidoDTO.getIdCliente(), pedidoDTO.getIdVendedor(), selectedItemIds);
             Cliente cliente = clienteService.buscarPorId(pedidoDTO.getIdCliente());
-            Vendedor vendedor = vendedorService.buscarPorId(pedidoDTO.getIdVendedor());
 
             // Validaciones de CBU y alias según el método de pago
             if (cliente.getCbu() == null && pedidoDTO.getMetodoPago().equals("TRANSFERENCIA")) {
@@ -386,16 +376,13 @@ public class PedidoController {
         }
     }
 
-    // Método para obtener el vendedor de un ítem
-    private Integer buscarVendedorDelItem(ItemMenu item) {
-        for (Vendedor vendedor : vendedorService.obtenerTodosLosVendedores()) {
-            for (ItemMenu itemMenu : vendedor.getItems()) {
-                if (itemMenu.getId() == item.getId()) {  
-                    return vendedor.getId();  
-                }
+    private boolean itemMenuVendedor(Vendedor vendedor, ItemMenu itemMenu) {
+        for (ItemMenu item : vendedor.getItems()) {
+            if (item.getId() == itemMenu.getId()) {  
+                return true;  
             }
         }
-        return null;  
+        return false;
     }
 
     @PutMapping("/pedidos/actualizar/{id}")

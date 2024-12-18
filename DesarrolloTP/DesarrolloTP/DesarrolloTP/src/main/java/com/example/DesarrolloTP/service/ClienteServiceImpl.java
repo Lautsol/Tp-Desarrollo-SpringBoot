@@ -109,9 +109,9 @@ public class ClienteServiceImpl implements ClienteService {
             }
 
             else if((cliente.getAlias() != null && !cliente.getAlias().isEmpty()) && cliente.getCbu() == null) {
-                boolean aliasValido = cliente.getAlias() != null && cliente.getAlias().matches("^[a-zA-Z0-9]+$");
+                boolean aliasValido = cliente.getAlias() != null && cliente.getAlias().matches("^[a-zA-Z0-9.]+$");
                 if(!aliasValido) { 
-                    errores.put("alias", "El alias sólo puede contener letras y números, sin espacios.");
+                    errores.put("alias", "El alias sólo puede contener letras, números y puntos, sin espacios.");
                 }
             }
 
@@ -121,9 +121,9 @@ public class ClienteServiceImpl implements ClienteService {
                     errores.put("cbu", "El CBU debe contener exactamente 6 dígitos.");
                 }
 
-                boolean aliasValido = cliente.getAlias() != null && cliente.getAlias().matches("^[a-zA-Z0-9]+$");
+                boolean aliasValido = cliente.getAlias() != null && cliente.getAlias().matches("^[a-zA-Z0-9.]+$");
                 if(!aliasValido) { 
-                    errores.put("alias", "El alias sólo puede contener letras y números, sin espacios.");
+                    errores.put("alias", "El alias sólo puede contener letras, números y puntos, sin espacios.");
                 }
             }
         }

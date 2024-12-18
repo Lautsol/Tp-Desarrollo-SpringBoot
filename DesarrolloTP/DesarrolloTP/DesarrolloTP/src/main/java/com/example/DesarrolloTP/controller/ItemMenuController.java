@@ -44,7 +44,6 @@ public class ItemMenuController {
         return "panelItemsMenu"; 
     }
 
-    /* 
     @GetMapping("/items-menu/{id}/crear")
     public String mostrarFormulario(@PathVariable int id, Model model) {
 
@@ -137,7 +136,6 @@ public class ItemMenuController {
             return "errorPage"; 
         }
     }
-    */
 
     @PostMapping("/items-menu/crear")
     public ResponseEntity<String> crearItemMenu(@RequestBody ItemMenuDTO itemMenuDTO) {

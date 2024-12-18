@@ -11,6 +11,7 @@ import com.example.DesarrolloTP.service.VendedorService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Iterator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -41,7 +43,6 @@ public class VendedorController {
         return "panelVendedores"; 
     }
     
-    /* 
     @GetMapping("/vendedores/{id}/crear")
     public String mostrarFormulario(@PathVariable int id, Model model) {
         
@@ -178,8 +179,7 @@ public class VendedorController {
             return "errorPage"; 
         }
     }
-    */
-
+    
     @PostMapping("/vendedores/crear")
     public ResponseEntity<String> crearVendedor(@RequestBody VendedorDTO vendedorDTO) {
 

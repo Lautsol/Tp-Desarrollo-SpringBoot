@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -34,7 +35,6 @@ public class ClienteController {
         return "panelClientes"; 
     }
 
-    /* 
     @GetMapping("/clientes/{id}/crear")
     public String mostrarFormulario(@PathVariable int id, Model model) {
 
@@ -98,7 +98,6 @@ public class ClienteController {
             return "errorPage"; 
         }
     }
-    */
 
     @PostMapping("/clientes/crear")
     public ResponseEntity<String> crearCliente(@RequestBody Cliente cliente) {

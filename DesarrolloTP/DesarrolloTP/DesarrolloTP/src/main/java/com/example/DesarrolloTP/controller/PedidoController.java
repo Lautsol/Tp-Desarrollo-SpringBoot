@@ -59,7 +59,6 @@ public class PedidoController {
         return "panelPedidos"; 
     }
     
-    /* 
     @GetMapping("/pedidos/{id}/crear")
     public String mostrarFormularioCrearPedido(@PathVariable int id, Model model) {
 
@@ -299,7 +298,6 @@ public class PedidoController {
             return "errorPage"; 
         }
     }
-    */
 
     @PostMapping("/pedidos/crear")
     public ResponseEntity<?> crearPedido(@RequestBody PedidoDTO pedidoDTO) {
